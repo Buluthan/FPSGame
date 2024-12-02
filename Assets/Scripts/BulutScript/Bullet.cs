@@ -11,10 +11,10 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Ýsabet kontrolü
-        Health health = collision.gameObject.GetComponent<Health>();
-        if (health != null)
+        GhostHealth ghostHealth = collision.gameObject.GetComponent<GhostHealth>();
+        if (ghostHealth != null)
         {
-            health.TakeDamage(damage);
+            ghostHealth.TakeDamage(damage);
         }
 
         // Mermiyi hemen yok et

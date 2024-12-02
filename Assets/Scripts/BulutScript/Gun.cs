@@ -9,7 +9,17 @@ public class Gun : MonoBehaviour
     public float bulletSpeed = 500f; // Mermi hýzý
     public float fireRate = 15f; // Ateþ etme hýzý
 
+    public AudioClip fireSound; // Ateþ etme sesi dosyasý
+    private AudioSource audioSource; // AudioSource bileþeni
+
     private float nextFireTime = 0f; // Bir sonraki ateþ etme zamaný
+
+    private void Start()
+    {
+        // ... (diðer kodlar)
+
+        audioSource = GetComponent<AudioSource>(); // AudioSource bileþenini al
+    }
 
     private void Update()
     {
@@ -26,9 +36,13 @@ public class Gun : MonoBehaviour
         // Mermiyi oluþtur
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
-        // Mermiye hýz ver
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
         bulletRigidbody.velocity = -firePoint.forward * bulletSpeed;
+
+        // Ateþ etme sesini oynat
+        audioSource.PlayOneShot(fireSound);
+
+        
 
     }
 }
