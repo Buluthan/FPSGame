@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public Transform firePoint; // Merminin çýkýþ noktasý
-    public GameObject bulletPrefab; // Mermi prefab'ý
-    public float bulletSpeed = 500f; // Mermi hýzý
-    public float fireRate = 15f; // Ateþ etme hýzý
+    public Transform firePoint; // Merminin ï¿½ï¿½kï¿½ï¿½ noktasï¿½
+    public GameObject bulletPrefab; // Mermi prefab'ï¿½
+    public float bulletSpeed = 500f; // Mermi hï¿½zï¿½
+    public float fireRate = 15f; // Ateï¿½ etme hï¿½zï¿½
 
-    public AudioClip fireSound; // Ateþ etme sesi dosyasý
-    private AudioSource audioSource; // AudioSource bileþeni
+    public AudioClip fireSound; // Ateï¿½ etme sesi dosyasï¿½
+    private AudioSource audioSource; // AudioSource bileï¿½eni
 
-    private float nextFireTime = 0f; // Bir sonraki ateþ etme zamaný
+    private float nextFireTime = 0f; // Bir sonraki ateï¿½ etme zamanï¿½
 
     private void Start()
     {
-        // ... (diðer kodlar)
+        // ... (diï¿½er kodlar)
 
-        audioSource = GetComponent<AudioSource>(); // AudioSource bileþenini al
+        audioSource = GetComponent<AudioSource>(); // AudioSource bileï¿½enini al
     }
 
     private void Update()
@@ -27,19 +27,20 @@ public class Gun : MonoBehaviour
         {
             nextFireTime = Time.time + 1f / fireRate;
             Shoot();
+            audioSource.volume = 0.1f;
         }
     }
 
     private void Shoot()
 
     {
-        // Mermiyi oluþtur
+        // Mermiyi oluï¿½tur
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 
         Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
         bulletRigidbody.velocity = -firePoint.forward * bulletSpeed;
 
-        // Ateþ etme sesini oynat
+        // Ateï¿½ etme sesini oynat
         audioSource.PlayOneShot(fireSound);
 
         

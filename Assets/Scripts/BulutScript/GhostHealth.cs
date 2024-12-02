@@ -4,27 +4,36 @@ using UnityEngine;
 
 public class GhostHealth : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 100f; // Hayaletin maksimum can deðeri
-    public float currentHealth; // Hayaletin þu anki can deðeri
+    [SerializeField] private float maxHealth = 100f; // Hayaletin maksimum can deï¿½eri
+    public float currentHealth; // Hayaletin ï¿½u anki can deï¿½eri
+
+    [SerializeField] FloatingHealthBar healthBar;
+
+    private void Awake() 
+    {
+        healthBar = GetComponentInChildren<FloatingHealthBar>();
+    }
 
     private void Start()
     {
-        currentHealth = maxHealth; // Baþlangýçta can deðerini maksimuma ayarla
+        currentHealth = maxHealth; // Baï¿½langï¿½ï¿½ta can deï¿½erini maksimuma ayarla
+        healthBar.UpdateHealthBar(currentHealth,maxHealth);
     }
 
-    public void TakeDamage(float damage) // Hayalete hasar vermek için çaðrýlacak fonksiyon
+    public void TakeDamage(float damage) // Hayalete hasar vermek iï¿½in ï¿½aï¿½rï¿½lacak fonksiyon
     {
-        currentHealth -= damage; // Can deðerini azalt
+        currentHealth -= damage; // Can deï¿½erini azalt
+        healthBar.UpdateHealthBar(currentHealth,maxHealth);
 
-        if (currentHealth <= 0) // Can deðeri 0 veya altýna düþerse
+        if (currentHealth <= 0) // Can deï¿½eri 0 veya altï¿½na dï¿½ï¿½erse
         {
-            Die(); // Ölüm fonksiyonunu çaðýr
+            Die(); // ï¿½lï¿½m fonksiyonunu ï¿½aï¿½ï¿½r
         }
     }
 
-    private void Die() // Hayalet öldüðünde çaðrýlacak fonksiyon
+    private void Die() // Hayalet ï¿½ldï¿½ï¿½ï¿½nde ï¿½aï¿½rï¿½lacak fonksiyon
     {
-        // Ölüm animasyonu veya efekti oynat (eðer varsa)
+        // ï¿½lï¿½m animasyonu veya efekti oynat (eï¿½er varsa)
         // ...
 
         // Hayaleti yok et

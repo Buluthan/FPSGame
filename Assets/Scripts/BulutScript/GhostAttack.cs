@@ -5,14 +5,16 @@ using UnityEngine.AI;
 
 public class GhostAttack : MonoBehaviour
 {
-    public Transform player; // Oyuncu karakterinin transform'u
-    public float attackDistance = 2f; // Saldırı mesafesi
-    public float attackDamage = 10f; // Saldırı hasarı
-    public float attackRate = 1f; // Saldırı hızı
+  public Transform player; // Oyuncu karakterinin transform'u
+    public float agroDistance = 10f; // AlgÄ±lama mesafesi
+    public float attackDistance = 2f; // SaldÄ±rÄ± mesafesi
+    public float attackDamage = 10f; // SaldÄ±rÄ± hasarÄ±
+    public float attackRate = 1f; // SaldÄ±rÄ± hÄ±zÄ±
 
-    private NavMeshAgent agent; // Hayaletin Nav Mesh Agent bileşeni
-    private Animator animator; // Hayaletin Animator bileşeni
-    private float nextAttackTime = 0f; // Bir sonraki saldırı zamanı
+    private NavMeshAgent agent; // Hayaletin Nav Mesh Agent bileÅŸeni
+    private Animator animator; // Hayaletin Animator bileÅŸeni
+    private float nextAttackTime = 0f; // Bir sonraki saldÄ±rÄ± zamanÄ±
+    private bool isAgro = false; // Hayaletin saldÄ±rÄ± modunda olup olmadÄ±ÄŸÄ±nÄ± kontrol eder
 
     private void Start()
     {
@@ -25,35 +27,50 @@ public class GhostAttack : MonoBehaviour
         // Oyuncuya olan mesafeyi hesapla
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Saldırı mesafesindeyse
-        if (distanceToPlayer <= attackDistance)
+        // Agro mekanizmasÄ±: Hayalet yalnÄ±zca agroDistance iÃ§inde hareket eder
+        if (distanceToPlayer <= agroDistance)
         {
-            // Oyuncuya bak
-            transform.LookAt(player);
-
-            // Saldırı zamanı geldiyse
-            if (Time.time >= nextAttackTime)
-            {
-                // Saldırı animasyonunu oynat
-                animator.SetTrigger("Attack_Shift"); // "attack_shift" trigger'ını kullan
-
-                // Oyuncuya hasar ver
-                player.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
-
-                // Bir sonraki saldırı zamanını ayarla
-                nextAttackTime = Time.time + 1f / attackRate;
-            }
-
-            // Hareket animasyonunu durdur (eğer varsa)
-            // animator.SetBool("IsMoving", false); // "IsMoving" parametresini false yap
+            isAgro = true;
         }
         else
         {
-            // Oyuncuya doğru hareket et
-            agent.SetDestination(player.position);
+            isAgro = false;
+            agent.SetDestination(transform.position); // Hareketi durdur
+            animator.SetBool("IsMoving", false); // Hareket animasyonunu durdur
+        }
 
-            // Hareket animasyonunu oynat (eğer varsa)
-            // animator.SetBool("IsMoving", true); // "IsMoving" parametresini true yap
+        if (isAgro)
+        {
+            if (distanceToPlayer <= attackDistance)
+            {
+                // Oyuncuya bak
+                transform.LookAt(player);
+
+                // SaldÄ±rÄ± zamanÄ±nÄ± kontrol et
+                if (Time.time >= nextAttackTime)
+                {
+                    // SaldÄ±rÄ± animasyonunu oynat
+                    animator.SetTrigger("Attack");
+
+                    // Oyuncuya hasar ver
+                    player.GetComponent<PlayerHealth>().TakeDamage(attackDamage);
+
+                    // Bir sonraki saldÄ±rÄ± zamanÄ±
+                    nextAttackTime = Time.time + 1f / attackRate;
+                }
+
+                // Hareket animasyonunu durdur
+                animator.SetBool("IsMoving", false);
+                agent.SetDestination(transform.position); // Hareketi durdur
+            }
+            else
+            {
+                // Oyuncuya doÄŸru hareket et
+                agent.SetDestination(player.position);
+
+                // Hareket animasyonunu oynat
+                animator.SetBool("IsMoving", true);
+            }
         }
     }
 }
